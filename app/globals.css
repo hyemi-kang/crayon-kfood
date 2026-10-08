@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #fbf6ea;
+  --color-paper-dark: #efe4cb;
+  --color-kraft: #c9a26b;
+  --color-kraft-dark: #a8814d;
+  --color-ink: #3b2f2a;
+  --color-crayon-red: #e8483a;
+  --color-crayon-orange: #f59a23;
+  --color-crayon-yellow: #ffd23f;
+  --color-crayon-green: #5bb450;
+  --color-crayon-blue: #3a8fd9;
+  --color-crayon-brown: #7a4a2b;
+  --font-hand: "Yusei Magic", "Hachi Maru Pop", "Gaegu", "Yu Gothic", cursive;
+  --font-pen: "Hachi Maru Pop", "Yusei Magic", "Gaegu", cursive;
+  --font-hangul: "Gaegu", "Yusei Magic", cursive;
+}
+
+html {
+  background: #2b2320;
+}
+
+body {
+  background: #2b2320;
+  color: var(--color-ink);
+  font-family: var(--font-hand);
+  overflow-x: hidden;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@media (pointer: fine) {
+  .has-crayon-cursor,
+  .has-crayon-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* 紙の質感：細かいノイズ + うっすら罫線 */
+.paper {
+  background-color: var(--color-paper);
+  background-image:
+    radial-gradient(rgba(120, 90, 50, 0.06) 1px, transparent 1px),
+    radial-gradient(rgba(120, 90, 50, 0.04) 1px, transparent 1px);
+  background-size: 7px 7px, 13px 13px;
+  background-position: 0 0, 3px 5px;
+}
+.kraft {
+  background-color: var(--color-kraft);
+  background-image:
+    radial-gradient(rgba(70, 40, 10, 0.12) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 5px 5px, 9px 9px;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.text-crayon {
+  text-shadow:
+    1px 0 0 currentColor,
+    -1px 0 0 currentColor,
+    0 1px 0 currentColor;
+  filter: url(#crayon-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}
