@@ -63,8 +63,10 @@ export default function Sketchbook() {
           scrub: 0.8,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          onUpdate: () => {
-            const time = tl.time();
+          onUpdate: (self) => {
+            // scrub で追従が遅れる tl.time() ではなく、スクロール位置から現在の時刻を求める
+            // （止まったあとに onUpdate が来なくても、タブが古いままにならない）
+            const time = self.progress * tl.duration();
             let idx = 0;
             labelTimes.current.forEach((lt, i) => {
               if (time >= lt - 0.01) idx = i;
