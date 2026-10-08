@@ -191,9 +191,24 @@ export function playCoverIntro(root: HTMLElement) {
 export const buildCover: PageBuilder = (tl, root, at) => {
   root.querySelectorAll("[data-sticker]").forEach((s) => {
     const depth = Number((s as HTMLElement).dataset.depth || 1);
-    tl.to(s, { yPercent: -60 * depth, rotate: 25 * depth, duration: 2.4, ease: "none" }, at);
+    tl.fromTo(
+      s,
+      { yPercent: 0, rotate: 0 },
+      { yPercent: -60 * depth, rotate: 25 * depth, duration: 2.4, ease: "none", immediateRender: false },
+      at,
+    );
   });
-  tl.to(root.querySelector("[data-cover-title]"), { y: -50, duration: 2.4, ease: "none" }, at);
-  tl.to(root.querySelector("[data-scroll-hint]"), { autoAlpha: 0, duration: 0.5 }, at);
+  tl.fromTo(
+    root.querySelector("[data-cover-title]"),
+    { y: 0 },
+    { y: -50, duration: 2.4, ease: "none", immediateRender: false },
+    at,
+  );
+  tl.fromTo(
+    root.querySelector("[data-scroll-hint]"),
+    { autoAlpha: 1 },
+    { autoAlpha: 0, duration: 0.5, immediateRender: false },
+    at,
+  );
   return at + 2.4;
 };

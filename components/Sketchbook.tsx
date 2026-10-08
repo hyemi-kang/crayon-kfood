@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { getLenis } from "@/lib/lenis";
+import { getLenis, setScrollLocked } from "@/lib/lenis";
 import CrayonFilters from "@/components/CrayonFilters";
 import SpiralBinding from "@/components/SpiralBinding";
 import PageTabs from "@/components/PageTabs";
@@ -112,8 +112,19 @@ export default function Sketchbook() {
   useGSAP(
     () => {
       if (!ready) return;
-      playCoverIntro(root("cover"));
-      ScrollTrigger.refresh();
+      const intro = playCoverIntro(root("cover"));
+      // イントロ中にスクロールされるとスクラブ側の開始値がずれるので、終わるまで待つ。
+      // ロック中は overflow:hidden でスクロールバーが無く、解除してもリサイズは発生しないため、
+      // pin の幅や start/end は解除したあとに測り直す（onComplete と保険の両方から呼ばれるので1回だけ）
+      let done = false;
+      const unlock = () => {
+        if (done) return;
+        done = true;
+        setScrollLocked(false);
+        ScrollTrigger.refresh();
+      };
+      intro.eventCallback("onComplete", unlock);
+      gsap.delayedCall(intro.duration() + 1, unlock); // 念のための保険
     },
     { scope: wrap, dependencies: [ready] },
   );

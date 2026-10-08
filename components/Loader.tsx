@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { spiralPath } from "@/lib/crayon";
+import { setScrollLocked } from "@/lib/lenis";
 
 // 白紙にクレヨンでぐるぐる落書き → 0〜100% → 紙が上にめくれて表紙が現れる
 export default function Loader({ onDone }: { onDone: () => void }) {
@@ -18,7 +19,8 @@ export default function Loader({ onDone }: { onDone: () => void }) {
         onDone();
         return;
       }
-      document.documentElement.style.overflow = "hidden";
+      // ローダー中〜表紙イントロ終了まではスクロールさせない（解除は Sketchbook 側）
+      setScrollLocked(true);
 
       const scribble = root.current!.querySelector("[data-scribble]");
       gsap.fromTo(
@@ -51,7 +53,6 @@ export default function Loader({ onDone }: { onDone: () => void }) {
         gsap
           .timeline({
             onComplete: () => {
-              document.documentElement.style.overflow = "";
               setGone(true);
               onDone();
             },
@@ -62,7 +63,7 @@ export default function Loader({ onDone }: { onDone: () => void }) {
 
       return () => {
         cancelled = true;
-        document.documentElement.style.overflow = "";
+        setScrollLocked(false);
       };
     },
     { scope: root },

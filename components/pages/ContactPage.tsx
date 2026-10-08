@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
-import { getLenis } from "@/lib/lenis";
+import { setScrollLocked } from "@/lib/lenis";
 import { popIn, type PageBuilder } from "@/lib/crayon";
 
 // ---- 紙飛行機の形（原点が中心）：四角 → 折った状態 → 飛行機 ----
@@ -41,16 +41,7 @@ const fieldCls =
   "w-full rounded-sm border-2 border-ink/35 bg-white/70 px-3 py-2 text-[clamp(.95rem,1.7vw,1.3rem)] text-ink outline-none transition-shadow placeholder:text-ink/35 focus:border-crayon-orange focus:shadow-[3px_3px_0_rgba(245,154,35,.45)] disabled:opacity-60";
 
 /** 送信アニメ中はスクロールを止める（スクラブ位置がずれないように） */
-function lockScroll(on: boolean) {
-  const lenis = getLenis();
-  if (on) {
-    lenis?.stop();
-    document.documentElement.style.overflow = "hidden";
-  } else {
-    lenis?.start();
-    document.documentElement.style.overflow = "";
-  }
-}
+const lockScroll = setScrollLocked;
 
 export default function ContactPage() {
   const root = useRef<HTMLDivElement>(null);
